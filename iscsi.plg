@@ -6,7 +6,7 @@
   <!ENTITY launch    "Settings/iscsi">
   <!ENTITY gitURL    "https://github.com/&author;/unraid-&name;/raw/master">
   <!ENTITY pluginURL "&gitURL;/&name;.plg">
-  <!ENTITY md5       "2e83487a1bedb8f304f391ffd662a48d">
+  <!ENTITY md5       "67856b60a181291856a895b560f56907">
   <!ENTITY plugin    "/boot/config/plugins/&name;">
   <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
@@ -81,11 +81,46 @@ fi
 install() {
 #Install iSCSI Target
 /sbin/installpkg "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz"
+depmod >> /dev/null
+}
+
+patch() {
+#Patching files and creating necessary direcotries/symlinks
+if [ ! -d /etc/target ]; then
+  mkdir -p /etc/target
+fi
+if [ ! -d /root/.targetcli ]; then
+  mkdir -p /root/.targetcli
+fi
+if [ ! -d /boot/config/iscsi/.targetcli ]; then
+  mkdir -p /boot/config/iscsi/.targetcli
+fi
+ln -s /boot/config/iscsi/saveconfig.json /etc/target/saveconfig.json
+ln -s /boot/config/iscsi/.targetcli/prefs.bin /root/.targetcli/prefs.bin
+
+#Load/unload iSCSI Target on Array start/stop
+echo "
+# Load iSCSI configuration
+echo 'Loading iSCSI configuration'
+targetcli restoreconfig &amp;" >> /usr/local/emhttp/plugins/dynamix/event/disks_mounted/local_syslog_start
+	echo "
+# Unload iSCSI configuration
+echo 'Unloading iSCSI configuration'
+targetcli clearconfig confirm=True &amp;" >> /usr/local/emhttp/plugins/dynamix/event/unmounting_disks/local_syslog_stop
+}
+
+start() {
+#Starting Targetcli-FB
+echo
+echo "----------------------------Starting iSCSI Target----------------------------"
+targetcli restoreconfig
 }
 
 #Check if iSCSI Target is allready downloaded
 check
 install > /dev/null
+patch
+start
 
 echo
 echo "------------------Installation of iSCSI Target successfull-------------------"
@@ -104,6 +139,9 @@ echo "---------------------------------------"
 removepkg &name;-&version;
 rm -rf /usr/local/emhttp/plugins/&name;
 rm -rf &plugin;
+#Remove load/unload iSCSI Target on Array start/stop
+sed -i '/\n/!N;/\n.*# Load iSCSI configuration/{$d;N;N;d};P;D' /usr/local/emhttp/plugins/dynamix/event/disks_mounted/local_syslog_start
+sed -i '/\n/!N;/\n.*# Unload iSCSI configuration/{$d;N;N;d};P;D' /usr/local/emhttp/plugins/dynamix/event/unmounting_disks/local_syslog_stop
 echo
 echo "----------------------------------------------------------------------------"
 echo "-----------iSCSI Target uninstalled, please reboot your server!-------------"
@@ -113,3 +151,4 @@ echo
 </INLINE>
 </FILE>
 </PLUGIN>
+
