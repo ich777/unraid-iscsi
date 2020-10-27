@@ -1,0 +1,115 @@
+<?xml version='1.0' standalone='yes'?>
+<!DOCTYPE PLUGIN [
+  <!ENTITY name      "iscsi">
+  <!ENTITY author    "ich777">
+  <!ENTITY version   "2020.10.27">
+  <!ENTITY launch    "Settings/iscsi">
+  <!ENTITY gitURL    "https://github.com/&author;/unraid-&name;/raw/master">
+  <!ENTITY pluginURL "&gitURL;/&name;.plg">
+  <!ENTITY md5       "2e83487a1bedb8f304f391ffd662a48d">
+  <!ENTITY plugin    "/boot/config/plugins/&name;">
+  <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
+]>
+
+<PLUGIN  name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0-beta31">
+
+<CHANGES>
+
+###2020.10.27
+Initial release
+
+</CHANGES>
+
+<FILE Run="/bin/bash">
+<INLINE>
+rm -f $(ls /boot/config/plugins/&name;/&name;*.txz 2>/dev/null|grep -v '&version;')
+</INLINE>
+</FILE>
+
+<FILE Name="/boot/config/plugins/&name;/&name;-&version;.txz" Run="upgradepkg --install-new">
+<URL>&gitURL;/packages/&name;-&version;.txz</URL>
+<MD5>&md5;</MD5>
+</FILE>
+
+<FILE Name="&emhttp;/README.md">
+<INLINE>
+**iSCSI Target**
+
+This Plugin adds iSCSI Target to Unraid, currenty it's command line only.
+</INLINE>
+</FILE>
+
+<FILE Run="/bin/bash">
+<INLINE>
+
+KERNEL_V="$(uname -r)"
+PACKAGE="iscsi"
+
+if [ ! -d "&plugin;/packages/${KERNEL_V%%-*}" ]; then
+  mkdir -p "&plugin;/packages/${KERNEL_V%%-*}"
+fi
+
+download() {
+#Download iSCSI Target
+if wget -q -nc --show-progress --progress=bar:force:noscroll -O "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" "&gitURL;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" ; then
+  if [ "$(md5sum "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" | cut -d ' ' -f1)" != "$(wget -qO- "&gitURL;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz.md5" | cut -d ' ' -f1)" ]; then
+    echo
+    echo "---CHECKSUM ERROR!---"
+    exit 1
+  fi
+  echo
+  echo "---------------------Sucessfully downloaded iSCSI Target---------------------"
+else
+  echo
+  echo "------------------------Can't download iSCSI Target--------------------------"
+  exit 1
+fi
+}
+
+check() {
+if [ ! -f "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" ]; then
+  echo
+  echo "-------------------------Downloading iSCSI Target----------------------------"
+  echo "----------This could take some time, please don't close this window!---------"
+  download
+else
+  echo
+  echo "-------------------------iSCSI Target found locally--------------------------"
+fi
+}
+
+install() {
+#Install iSCSI Target
+/sbin/installpkg "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz"
+}
+
+#Check if iSCSI Target is allready downloaded
+check
+install > /dev/null
+
+echo
+echo "------------------Installation of iSCSI Target successfull-------------------"
+echo
+
+</INLINE>
+</FILE>
+
+<FILE Run="/bin/bash" Method="remove">
+<INLINE>
+
+echo "---------------------------------------"
+echo "-------Uninstalling iSCSI Target-------"
+echo "---------------------------------------"
+# Remove plugin related files
+removepkg &name;-&version;
+rm -rf /usr/local/emhttp/plugins/&name;
+rm -rf &plugin;
+echo
+echo "----------------------------------------------------------------------------"
+echo "-----------iSCSI Target uninstalled, please reboot your server!-------------"
+echo "----------------------------------------------------------------------------"
+echo
+
+</INLINE>
+</FILE>
+</PLUGIN>
