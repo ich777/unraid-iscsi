@@ -3,7 +3,7 @@
   <!ENTITY name      "iscsi">
   <!ENTITY author    "ich777">
   <!ENTITY version   "2020.10.28">
-  <!ENTITY launch    "Settings/iscsi">
+  <!ENTITY launch    "Settings/iscsi_main">
   <!ENTITY gitURL    "https://github.com/&author;/unraid-&name;/raw/master">
   <!ENTITY pluginURL "&gitURL;/&name;.plg">
   <!ENTITY md5       "d75c4f478142299aa828b415ba7abf32">
