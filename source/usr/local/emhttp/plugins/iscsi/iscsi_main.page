@@ -1,0 +1,5 @@
+Menu="Utilities"
+Type="xmenu"
+Title="iSCSI Target"
+Icon="iscsi.png"
+Tabs="true"
