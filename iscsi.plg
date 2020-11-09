@@ -6,7 +6,7 @@
   <!ENTITY launch    "Settings/iscsi_main">
   <!ENTITY gitURL    "https://github.com/&author;/unraid-&name;/raw/master">
   <!ENTITY pluginURL "&gitURL;/&name;.plg">
-  <!ENTITY md5       "d75c4f478142299aa828b415ba7abf32">
+  <!ENTITY md5       "9ae138957a875168908088eb0d81e0cf">
   <!ENTITY plugin    "/boot/config/plugins/&name;">
   <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
@@ -14,6 +14,9 @@
 <PLUGIN  name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0-beta31">
 
 <CHANGES>
+
+###2020.11.09
+- Corrected bug where plugin configuration page doesn't show up on Unraid version 6.9.0beta33
 
 ###2020.10.28
 - Added basic GUI for creation/deletion of IQNs,FileIO/Block Volumes, LUNs, ACL's
