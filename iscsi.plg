@@ -85,6 +85,10 @@ fi
 check() {
 if [ ! -s "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" ]; then
   rm -rf &plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz
+  echo
+  echo "----Download is empty please contact the developer of this plugin if the-----"
+  echo "----------plugin has been already built against that Kernel version----------"
+  exit 1
 elif [ ! -f "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" ]; then
   echo
   echo "-------------------------Downloading iSCSI Target----------------------------"
