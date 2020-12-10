@@ -2,7 +2,7 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name      "iscsi">
   <!ENTITY author    "ich777">
-  <!ENTITY version   "2020.11.30">
+  <!ENTITY version   "2020.12.10">
   <!ENTITY launch    "Settings/iscsi_main">
   <!ENTITY gitURL    "https://github.com/&author;/unraid-&name;/raw/master">
   <!ENTITY pluginURL "&gitURL;/&name;.plg">
@@ -14,6 +14,9 @@
 <PLUGIN  name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0-beta31">
 
 <CHANGES>
+###2020.12.10
+- Fixed removal of empty downloads
+
 ###2020.11.30
 - Added save button
 - Corrected bug on main page
@@ -80,7 +83,9 @@ fi
 }
 
 check() {
-if [ ! -f "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" ]; then
+if [ ! -s "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" ]; then
+  rm -rf &plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz
+elif [ ! -f "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" ]; then
   echo
   echo "-------------------------Downloading iSCSI Target----------------------------"
   echo "----------This could take some time, please don't close this window!---------"
