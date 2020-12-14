@@ -83,7 +83,7 @@ if wget -q -nc --show-progress --progress=bar:force:noscroll -O "&plugin;/packag
     exit 1
   fi
   echo
-  echo "----------------------Sucessfully downloaded iSCSI Target-----------------------"
+  echo "--------------Sucessfully downloaded iSCSI Target, please wait...---------------"
 else
   echo
   echo "-----ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR------"
