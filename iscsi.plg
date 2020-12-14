@@ -2,7 +2,7 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name      "iscsi">
   <!ENTITY author    "ich777">
-  <!ENTITY version   "2020.12.10">
+  <!ENTITY version   "2020.12.14">
   <!ENTITY launch    "Settings/iscsi_main">
   <!ENTITY gitURL    "https://github.com/&author;/unraid-&name;/raw/master">
   <!ENTITY pluginURL "&gitURL;/&name;.plg">
@@ -14,6 +14,10 @@
 <PLUGIN  name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0-beta31">
 
 <CHANGES>
+###2020.12.14
+- Fixed bug of disappearing fileIO targets on start/restart of Unraid
+- Corrected/added messages/description
+
 ###2020.12.10
 - Fixed removal of empty downloads
 
@@ -47,7 +51,7 @@ rm -f $(ls /boot/config/plugins/&name;/&name;*.txz 2>/dev/null|grep -v '&version
 <INLINE>
 **iSCSI Target**
 
-This Plugin adds iSCSI Target to Unraid, currenty it's command line only.
+This Plugin adds iSCSI Target to Unraid, the GUI is currently in beta.
 </INLINE>
 </FILE>
 
@@ -69,15 +73,20 @@ download() {
 #Download iSCSI Target
 if wget -q -nc --show-progress --progress=bar:force:noscroll -O "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" "${DL_URL}/${PACKAGE}-1.txz" ; then
   if [ "$(md5sum "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" | cut -d ' ' -f1)" != "$(wget -qO- "${DL_URL}/${PACKAGE}-1.txz.md5" | cut -d ' ' -f1)" ]; then
+    if [ -d &plugin; ]; then
+      rm -rf &plugin;
+    fi
     echo
-    echo "---CHECKSUM ERROR!---"
+    echo "-----ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR------"
+    echo "--------------------------------CHECKSUM ERROR!---------------------------------"
     exit 1
   fi
   echo
-  echo "---------------------Sucessfully downloaded iSCSI Target---------------------"
+  echo "----------------------Sucessfully downloaded iSCSI Target-----------------------"
 else
   echo
-  echo "------------------------Can't download iSCSI Target--------------------------"
+  echo "-----ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR------"
+  echo "-------------------------Can't download iSCSI Target----------------------------"
   exit 1
 fi
 }
@@ -85,25 +94,33 @@ fi
 check() {
 if [ ! -f "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" ]; then
   echo
-  echo "-------------------------Downloading iSCSI Target----------------------------"
-  echo "----------This could take some time, please don't close this window!---------"
+  echo "+=============================================================================="
+  echo "| WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING"
+  echo "|"
+  echo "| Don't close this window with the red 'X' in the top right corner until the 'DONE' button is displayed!"
+  echo "|"
+  echo "| WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING"
+  echo "+=============================================================================="
+  echo
+  echo "--------------------------Downloading iSCSI Target-----------------------------"
+  echo "-----------This could take some time, please don't close this window!----------"
   download
 elif [ ! -s "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" ]; then
   rm -rf &plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz
   echo
-  echo "----Download is empty please contact the developer of this plugin if the-----"
-  echo "----------plugin has been already built against that Kernel version----------"
+  echo "-----ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR------"
+  echo "-----Download is empty please contact the developer of this plugin if the-------"
+  echo "-------plugin has been already built against the current Kernel version---------"
   exit 1
 else
   echo
-  echo "-------------------------iSCSI Target found locally--------------------------"
+  echo "--------------------------iSCSI Target found locally----------------------------"
 fi
 }
 
 install() {
 #Install iSCSI Target
 /sbin/installpkg "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz"
-depmod >> /dev/null
 }
 
 patch() {
@@ -134,7 +151,7 @@ targetcli clearconfig confirm=True &amp;" >> /usr/local/emhttp/plugins/dynamix/e
 start() {
 #Starting Targetcli-FB
 echo
-echo "----------------------------Starting iSCSI Target----------------------------"
+echo "---------------------Starting iSCSI Target, please wait...----------------------"
 targetcli restoreconfig
 }
 
@@ -142,10 +159,12 @@ targetcli restoreconfig
 check
 install > /dev/null
 patch
-start
+if [ ! -z "$(pidof emhttpd)" ]; then
+	start
+fi
 
 echo
-echo "------------------Installation of iSCSI Target successfull-------------------"
+echo "-------------------Installation of iSCSI Target successfull---------------------"
 echo
 
 </INLINE>
