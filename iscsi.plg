@@ -83,7 +83,7 @@ if wget -q -nc --show-progress --progress=bar:force:noscroll -O "&plugin;/packag
     exit 1
   fi
   echo
-  echo "--------------Sucessfully downloaded iSCSI Target, please wait...---------------"
+  echo "--------------Sucessfully downloaded iSCSI Target, please wait...!--------------"
 else
   echo
   echo "-----ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR------"
@@ -103,19 +103,19 @@ if [ ! -f "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" ]; then
   echo "| WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING"
   echo "+=============================================================================="
   echo
-  echo "--------------------------Downloading iSCSI Target-----------------------------"
+  echo "------------------Downloading iSCSI Target, please wait...!--------------------"
   echo "-----------This could take some time, please don't close this window!----------"
   download
 elif [ ! -s "&plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz" ]; then
   rm -rf &plugin;/packages/${KERNEL_V%%-*}/${PACKAGE}-1.txz
   echo
-  echo "-----ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR------"
-  echo "-----Download is empty please contact the developer of this plugin if the-------"
-  echo "-------plugin has been already built against the current Kernel version---------"
+  echo "-----ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR-----"
+  echo "-----Download is empty please contact the developer of this plugin if the------"
+  echo "-------plugin has been already built against the current Kernel version--------"
   exit 1
 else
   echo
-  echo "--------------------------iSCSI Target found locally----------------------------"
+  echo "--------------------------iSCSI Target found locally!--------------------------"
 fi
 }
 
@@ -152,7 +152,7 @@ targetcli clearconfig confirm=True &amp;" >> /usr/local/emhttp/plugins/dynamix/e
 start() {
 #Starting Targetcli-FB
 echo
-echo "---------------------Starting iSCSI Target, please wait...----------------------"
+echo "---------------------Starting iSCSI Target, please wait...!--------------------"
 targetcli restoreconfig
 }
 
@@ -165,7 +165,7 @@ if [ ! -z "$(pidof emhttpd)" ]; then
 fi
 
 echo
-echo "-------------------Installation of iSCSI Target successfull---------------------"
+echo "-------------------Installation of iSCSI Target successfull--------------------"
 echo
 
 </INLINE>
