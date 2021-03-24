@@ -2,11 +2,11 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name      "iscsi">
   <!ENTITY author    "ich777">
-  <!ENTITY version   "2021.01.04">
+  <!ENTITY version   "2021.03.24">
   <!ENTITY launch    "Settings/iscsi_main">
   <!ENTITY gitURL    "https://github.com/&author;/unraid-&name;/raw/master">
   <!ENTITY pluginURL "&gitURL;/&name;.plg">
-  <!ENTITY md5       "fc9914e80de79206d8b31ce259616204">
+  <!ENTITY md5       "54bef526d2c29528288c632eb3457789">
   <!ENTITY plugin    "/boot/config/plugins/&name;">
   <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
@@ -14,6 +14,10 @@
 <PLUGIN  name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0-beta31">
 
 <CHANGES>
+
+###2021.01.04
+- Fixed permission issues
+- Corrected a typos
 
 ###2021.01.04
 - Fixed a bug where the buttons on the iSCSI Volumes and ACL page are not displayed on Chrome, Edge,...
@@ -86,11 +90,11 @@ if wget -q -nc --show-progress --progress=bar:force:noscroll -O "&plugin;/packag
     exit 1
   fi
   echo
-  echo "--------------Sucessfully downloaded iSCSI Target, please wait...!--------------"
+  echo "-------------Successfully downloaded iSCSI Target, please wait...!-------------"
 else
   echo
-  echo "-----ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR------"
-  echo "-------------------------Can't download iSCSI Target----------------------------"
+  echo "----ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR - ERROR------"
+  echo "------------------------Can't download iSCSI Target----------------------------"
   exit 1
 fi
 }
@@ -168,7 +172,7 @@ if [ ! -z "$(pidof emhttpd)" ]; then
 fi
 
 echo
-echo "-------------------Installation of iSCSI Target successfull--------------------"
+echo "-------------------Installation of iSCSI Target successful---------------------"
 echo
 
 </INLINE>
