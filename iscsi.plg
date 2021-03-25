@@ -2,7 +2,7 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name      "iscsi">
   <!ENTITY author    "ich777">
-  <!ENTITY version   "2021.03.24">
+  <!ENTITY version   "2021.03.25">
   <!ENTITY launch    "Settings/iscsi_main">
   <!ENTITY gitURL    "https://github.com/&author;/unraid-&name;/raw/master">
   <!ENTITY pluginURL "&gitURL;/&name;.plg">
@@ -14,6 +14,9 @@
 <PLUGIN  name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0-beta31">
 
 <CHANGES>
+
+###2021.03.25
+- Added wait for network and timout
 
 ###2021.01.04
 - Fixed permission issues
@@ -69,6 +72,12 @@ This Plugin adds iSCSI Target to Unraid, the GUI is currently in beta.
 KERNEL_V="$(uname -r)"
 PACKAGE="iscsi"
 DL_URL="https://github.com/ich777/unraid-plugins-repo/releases/download/$KERNEL_V"
+
+#Wait for Network and timeout after 30 seconds
+HOST="8.8.8.8"
+for i in {1..10}; do
+  ping -c1 $HOST &amp;> /dev/null &amp;&amp; break;
+done
 
 if [ ! -d "&plugin;/packages/${KERNEL_V%%-*}" ]; then
   mkdir -p "&plugin;/packages/${KERNEL_V%%-*}"
