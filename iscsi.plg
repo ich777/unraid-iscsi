@@ -183,13 +183,13 @@ if [ ! -z "$(pidof emhttpd)" ]; then
 	start
 fi
 
-echo "------------------------------------------------------------------------------------"
+echo "+-----------------------------------------------------------------------------------"
 echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION"
 echo "|"
 echo "| This plugin is deprecated in favour to: https://github.com/SimonFair/unraid.iSCSI/"
 echo "|"
 echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION"
-echo "------------------------------------------------------------------------------------"
+echo "+-----------------------------------------------------------------------------------"
 
 echo
 echo "-------------------Installation of iSCSI Target successful---------------------"
