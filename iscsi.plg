@@ -2,7 +2,7 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name      "iscsi">
   <!ENTITY author    "ich777">
-  <!ENTITY version   "2021.03.25">
+  <!ENTITY version   "2021.09.17">
   <!ENTITY launch    "Settings/iscsi_main">
   <!ENTITY gitURL    "https://github.com/&author;/unraid-&name;/raw/master">
   <!ENTITY pluginURL "&gitURL;/&name;.plg">
@@ -14,6 +14,9 @@
 <PLUGIN  name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0-beta31">
 
 <CHANGES>
+
+###2021.09.17
+- Added deprecation message, please use this plugin: https://github.com/SimonFair/unraid.iSCSI/ instead! You find it also in the CA App.
 
 ###2021.03.25
 - Added wait for network and timout
@@ -179,6 +182,14 @@ patch
 if [ ! -z "$(pidof emhttpd)" ]; then
 	start
 fi
+
+echo "------------------------------------------------------------------------------------"
+echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION"
+echo "|"
+echo "| This plugin is deprecated in favour to: https://github.com/SimonFair/unraid.iSCSI/"
+echo "|"
+echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION"
+echo "------------------------------------------------------------------------------------"
 
 echo
 echo "-------------------Installation of iSCSI Target successful---------------------"
